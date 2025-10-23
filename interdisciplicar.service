@@ -1,0 +1,11 @@
+[Unit]
+Description=Interdisciplinar Sementes
+After=network.target
+WorkingDirectory=/lab-sementes-api/
+ExecStart= ./mvnw quarkus:dev
+Restart=on-failure
+RestartSec=5s
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target
