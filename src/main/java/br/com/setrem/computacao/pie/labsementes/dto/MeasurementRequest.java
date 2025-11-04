@@ -1,4 +1,4 @@
-package org.setrem.computacao.pie.labsementes.dto;
+package br.com.setrem.computacao.pie.labsementes.dto;
 
 import java.time.Instant;
 

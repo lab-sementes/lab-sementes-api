@@ -1,11 +1,11 @@
-package org.setrem.computacao.pie.labsementes.controller;
+package br.com.setrem.computacao.pie.labsementes.controller;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.jboss.resteasy.reactive.RestResponse;
-import org.setrem.computacao.pie.labsementes.model.Sensor;
-import org.setrem.computacao.pie.labsementes.service.SensorService;
+import br.com.setrem.computacao.pie.labsementes.model.Sensor;
+import br.com.setrem.computacao.pie.labsementes.service.SensorService;
 
 import java.util.List;
 

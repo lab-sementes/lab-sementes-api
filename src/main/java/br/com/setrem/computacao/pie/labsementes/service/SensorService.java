@@ -1,8 +1,8 @@
-package org.setrem.computacao.pie.labsementes.service;
+package br.com.setrem.computacao.pie.labsementes.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
-import org.setrem.computacao.pie.labsementes.model.Sensor;
+import br.com.setrem.computacao.pie.labsementes.model.Sensor;
 
 import java.util.List;
 import java.util.Optional;

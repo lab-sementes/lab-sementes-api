@@ -1,11 +1,11 @@
-package org.setrem.computacao.pie.labsementes.service;
+package br.com.setrem.computacao.pie.labsementes.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
-import org.setrem.computacao.pie.labsementes.dto.MeasurementRequest;
-import org.setrem.computacao.pie.labsementes.model.Measurement;
-import org.setrem.computacao.pie.labsementes.model.Sensor;
+import br.com.setrem.computacao.pie.labsementes.dto.MeasurementRequest;
+import br.com.setrem.computacao.pie.labsementes.model.Measurement;
+import br.com.setrem.computacao.pie.labsementes.model.Sensor;
 
 import java.time.Instant;
 import java.util.List;

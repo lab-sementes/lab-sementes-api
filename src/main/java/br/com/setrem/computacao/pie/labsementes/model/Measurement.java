@@ -1,4 +1,4 @@
-package org.setrem.computacao.pie.labsementes.model;
+package br.com.setrem.computacao.pie.labsementes.model;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
 

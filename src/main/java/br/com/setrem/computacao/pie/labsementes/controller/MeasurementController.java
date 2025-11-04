@@ -1,11 +1,11 @@
-package org.setrem.computacao.pie.labsementes.controller;
+package br.com.setrem.computacao.pie.labsementes.controller;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import org.jboss.resteasy.reactive.RestResponse;
-import org.setrem.computacao.pie.labsementes.dto.MeasurementRequest;
-import org.setrem.computacao.pie.labsementes.model.Measurement;
-import org.setrem.computacao.pie.labsementes.service.MeasurementService;
+import br.com.setrem.computacao.pie.labsementes.dto.MeasurementRequest;
+import br.com.setrem.computacao.pie.labsementes.model.Measurement;
+import br.com.setrem.computacao.pie.labsementes.service.MeasurementService;
 
 import java.time.Instant;
 import java.util.List;

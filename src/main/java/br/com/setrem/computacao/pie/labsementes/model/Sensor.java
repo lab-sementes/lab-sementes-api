@@ -1,8 +1,8 @@
-package org.setrem.computacao.pie.labsementes.model;
+package br.com.setrem.computacao.pie.labsementes.model;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
-import org.setrem.computacao.pie.labsementes.SensorType;
+import br.com.setrem.computacao.pie.labsementes.SensorType;
 
 @Entity
 @Table(name = "sensors")
