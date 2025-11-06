@@ -4,17 +4,23 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import br.com.setrem.computacao.pie.labsementes.model.Sensor;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
 public class SensorService {
+
     public List<Sensor> listarTodos() {
         return Sensor.listAll();
     }
 
-    public Optional<Sensor> buscarPorId(Long id) {
+    public Optional<Sensor> buscarPorId(Integer id) {
         return Sensor.findByIdOptional(id);
+    }
+
+    public Optional<Sensor> buscarPorAddress(String address) {
+        return Optional.ofNullable(Sensor.findByAddress(address));
     }
 
     @Transactional
@@ -24,7 +30,8 @@ public class SensorService {
     }
 
     @Transactional
-    public Optional<Sensor> atualizar(Long id, Sensor sensorAtualizado) {
+    public Optional<Sensor> atualizar(Integer id, Sensor sensorAtualizado) {
+
         Optional<Sensor> sensorOptional = Sensor.findByIdOptional(id);
 
         if (sensorOptional.isEmpty()) {
@@ -32,16 +39,30 @@ public class SensorService {
         }
 
         Sensor sensorExistente = sensorOptional.get();
+
         sensorExistente.sensorName = sensorAtualizado.sensorName;
         sensorExistente.sensorType = sensorAtualizado.sensorType;
-        sensorExistente.location = sensorAtualizado.location;
         sensorExistente.uniqueAddress = sensorAtualizado.uniqueAddress;
+
+        if (sensorExistente.status != sensorAtualizado.status) {
+            sensorExistente.status = sensorAtualizado.status;
+            sensorExistente.dataUltimaMudancaStatus = Instant.now();
+        }
 
         return Optional.of(sensorExistente);
     }
 
     @Transactional
-    public boolean deletar(Long id) {
+    public boolean deletar(Integer id) {
         return Sensor.deleteById(id);
+    }
+
+    @Transactional
+    public Optional<Sensor> desativarSensor(Integer id) {
+        Optional<Sensor> sensorOptional = Sensor.findByIdOptional(id);
+
+        sensorOptional.ifPresent(sensor -> sensor.desativar(Instant.now()));
+
+        return sensorOptional;
     }
 }
