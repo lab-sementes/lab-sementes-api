@@ -3,7 +3,7 @@
 CREATE TYPE sensor_status AS ENUM (
     'Ativado',
     'Desativado',
-    'Manutenção'
+    'Manutencao'
 );
 
 -- Cria um sensor, sem se preocupar com a Normalização do tipo e address
