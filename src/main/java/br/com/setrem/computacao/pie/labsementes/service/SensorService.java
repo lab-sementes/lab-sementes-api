@@ -25,6 +25,16 @@ public class SensorService {
 
     @Transactional
     public Sensor create(Sensor sensor) {
+
+        if (sensor.dataCriacao == null) {
+            sensor.dataCriacao = Instant.now();
+        }
+
+        // Garantir que a data da última mudança de status também seja setada na criação
+        if (sensor.dataUltimaMudancaStatus == null) {
+            sensor.dataUltimaMudancaStatus = sensor.dataCriacao;
+        }
+
         sensor.persist();
         return sensor;
     }

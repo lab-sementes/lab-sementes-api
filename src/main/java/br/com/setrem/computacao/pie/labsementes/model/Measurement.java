@@ -8,23 +8,27 @@ import java.time.Instant;
 @Table(name = "measurement")
 public class Measurement extends PanacheEntityBase {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "measurement_id")
-    public Long measurementId;
+    // Primary Key Composta
+    @EmbeddedId
+    public MeasurementID id;
 
-    @Column(name = "\"time\"", nullable = false)
-    public Instant time;
+    // Os valores medidos
+    public double temperature;
+    public double humidity;
 
-    @Column(nullable = false)
-    public Double temperature;
-
-    public Double humidity;
-
-    /*
-    * Cria um mapeamento do relacionamento da tabela de Measurements com a de Sensores
-    */
+    // Relacionamentos com o Sensor
     @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("sensorId")
     @JoinColumn(name = "sensor_id", nullable = false)
     public Sensor sensor;
+
+    // Contrutor para facilitar a inserção
+    public Measurement() {}
+
+    public Measurement(Sensor sensor, Instant ts, Double temperature, Double humidity) {
+        this.id = new MeasurementID(sensor.id, ts);
+        this.sensor = sensor;
+        this.temperature = temperature;
+        this.humidity = humidity;
+    }
 }
