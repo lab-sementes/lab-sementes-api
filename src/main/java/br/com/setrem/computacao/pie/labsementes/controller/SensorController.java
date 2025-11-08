@@ -55,10 +55,13 @@ public class SensorController {
 
     @DELETE
     @Path("/{id}")
-    public RestResponse<?> deletar(@PathParam("id") Integer id) {
-        if (sensorService.deletar(id)) {
-            return RestResponse.ResponseBuilder.noContent().build();
+    public RestResponse<Optional<Sensor>> deletar(@PathParam("id") Integer id) {
+        Optional<Sensor> sucess = sensorService.desativarSensor(id);
+
+        if (sucess.isEmpty()) {
+            return RestResponse.notFound();
         }
-        return RestResponse.ResponseBuilder.notFound().build();
+
+        return RestResponse.ResponseBuilder.ok(sucess).build();
     }
 }
