@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "measurements")
+@Table(name = "measurement")
 public class Measurement extends PanacheEntityBase {
 
     @Id
