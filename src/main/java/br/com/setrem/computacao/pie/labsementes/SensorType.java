@@ -1,4 +1,4 @@
-package org.setrem.computacao.pie.labsementes;
+package br.com.setrem.computacao.pie.labsementes;
 
 public enum SensorType {
     DHT11,

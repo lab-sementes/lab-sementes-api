@@ -1,17 +1,20 @@
-package org.setrem.computacao.pie.labsementes.controller;
+package br.com.setrem.computacao.pie.labsementes.controller;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.jboss.resteasy.reactive.RestResponse;
-import org.setrem.computacao.pie.labsementes.model.Sensor;
-import org.setrem.computacao.pie.labsementes.service.SensorService;
+import br.com.setrem.computacao.pie.labsementes.model.Sensor;
+import br.com.setrem.computacao.pie.labsementes.service.SensorService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Path("/sensores")
+@Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class SensorController {
+
     @Inject
     private SensorService sensorService;
 
@@ -28,16 +31,23 @@ public class SensorController {
 
     @GET
     @Path("/{id}")
-    public RestResponse<Sensor> buscarPorId(@PathParam("id") Long id) {
-
+    public RestResponse<Sensor> buscarPorId(@PathParam("id") Integer id) {
         return sensorService.buscarPorId(id)
+                .map(sensor -> RestResponse.ResponseBuilder.ok(sensor).build())
+                .orElse(RestResponse.status(RestResponse.Status.NOT_FOUND));
+    }
+
+    @GET
+    @Path("/address/{address}")
+    public RestResponse<Sensor> buscarPorAddress(@PathParam("address") String address) {
+        return sensorService.buscarPorAddress(address)
                 .map(sensor -> RestResponse.ResponseBuilder.ok(sensor).build())
                 .orElse(RestResponse.status(RestResponse.Status.NOT_FOUND));
     }
 
     @PUT
     @Path("/{id}")
-    public RestResponse<Sensor> atualizar(@PathParam("id") Long id, Sensor sensor) {
+    public RestResponse<Sensor> atualizar(@PathParam("id") Integer id, Sensor sensor) {
         return sensorService.atualizar(id, sensor)
                 .map(sensorAtualizado -> RestResponse.ResponseBuilder.ok(sensorAtualizado).build())
                 .orElse(RestResponse.status(RestResponse.Status.NOT_FOUND));
@@ -45,10 +55,13 @@ public class SensorController {
 
     @DELETE
     @Path("/{id}")
-    public RestResponse<?> deletar(@PathParam("id") Long id) {
-        if (sensorService.deletar(id)) {
-            return RestResponse.ResponseBuilder.noContent().build();
+    public RestResponse<Optional<Sensor>> deletar(@PathParam("id") Integer id) {
+        Optional<Sensor> sucess = sensorService.desativarSensor(id);
+
+        if (sucess.isEmpty()) {
+            return RestResponse.notFound();
         }
-        return RestResponse.ResponseBuilder.notFound().build();
+
+        return RestResponse.ResponseBuilder.ok(sucess).build();
     }
 }
