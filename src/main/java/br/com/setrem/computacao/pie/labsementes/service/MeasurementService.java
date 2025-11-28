@@ -2,6 +2,8 @@ package br.com.setrem.computacao.pie.labsementes.service;
 
 import br.com.setrem.computacao.pie.labsementes.dto.SensorDataAggregate;
 import br.com.setrem.computacao.pie.labsementes.model.MeasurementID;
+import io.quarkus.mailer.Mail;
+import io.quarkus.mailer.Mailer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -9,6 +11,7 @@ import jakarta.ws.rs.NotFoundException;
 import br.com.setrem.computacao.pie.labsementes.dto.MeasurementDTO;
 import br.com.setrem.computacao.pie.labsementes.model.Measurement;
 import br.com.setrem.computacao.pie.labsementes.model.Sensor;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
