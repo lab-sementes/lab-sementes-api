@@ -31,6 +31,14 @@ public class MeasurementService {
     @Inject
     DataSource dataSource;
 
+    // Injetando o Serviço de email
+    @Inject
+    Mailer mailer;
+
+    // Injetando o email destino
+    @ConfigProperty(name = "lab.email.responsavel")
+    String emailResponsavel;
+
     // --- Métodos do Panache (CRUD Simples)
 
     @Transactional
