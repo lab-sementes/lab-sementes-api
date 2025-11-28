@@ -9,8 +9,8 @@ crontab -e
 E adicione o trecho abaixo para fazer o script rodar sozinho todo dia às 02:00 da manhã:
 
 ```crontab
-# Backup Banco Seeds Lab - Todo dia as 02:00
-0 2 * * * /usr/bin/python3 /home/seu_usuario/scripts/backup.py >> /home/seu_usuario/scripts/backup.log 2>&1
+# Backup TimescaleDB - Todo dia as 02:00
+0 2 * * * /usr/bin/python3 /lab-sementes-api/backup.py >> /backups-banco/backup.log 2>&1
 ```
 
 ### Importante

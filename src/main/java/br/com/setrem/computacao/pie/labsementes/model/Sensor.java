@@ -46,4 +46,18 @@ public class Sensor extends PanacheEntityBase {
         this.dataUltimaMudancaStatus = data;
         this.persistAndFlush();
     }
+
+    public String sala;
+
+    @Column(name = "temp_min")
+    public Double tempMin;
+
+    @Column(name = "temp_max")
+    public Double tempMax;
+
+    @Column(name = "umid_min")
+    public Double umidMin;
+
+    @Column(name = "umid_max")
+    public Double umidMax;
 }

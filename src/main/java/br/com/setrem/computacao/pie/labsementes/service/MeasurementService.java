@@ -2,6 +2,8 @@ package br.com.setrem.computacao.pie.labsementes.service;
 
 import br.com.setrem.computacao.pie.labsementes.dto.SensorDataAggregate;
 import br.com.setrem.computacao.pie.labsementes.model.MeasurementID;
+import io.quarkus.mailer.Mail;
+import io.quarkus.mailer.Mailer;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -9,6 +11,7 @@ import jakarta.ws.rs.NotFoundException;
 import br.com.setrem.computacao.pie.labsementes.dto.MeasurementDTO;
 import br.com.setrem.computacao.pie.labsementes.model.Measurement;
 import br.com.setrem.computacao.pie.labsementes.model.Sensor;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -28,6 +31,14 @@ public class MeasurementService {
     @Inject
     DataSource dataSource;
 
+    // Injetando o Serviço de email
+    @Inject
+    Mailer mailer;
+
+    // Injetando o email destino
+    @ConfigProperty(name = "lab.email.responsavel")
+    String emailResponsavel;
+
     // --- Métodos do Panache (CRUD Simples)
 
     @Transactional
@@ -46,7 +57,75 @@ public class MeasurementService {
         );
 
         measurement.persist();
+
+        verificarEEnviarAlertas(sensor, measurement);
+
         return measurement;
+    }
+
+    private void verificarEEnviarAlertas(Sensor sensor, Measurement medicao) {
+        // Lista para acumular mensagens de erro (ex: Temp alta E Umidade baixa)
+        List<String> alertas = new ArrayList<>();
+
+        // Verifica Temperatura Máxima (só se estiver configurada no banco)
+        if (sensor.tempMax != null && medicao.temperature > sensor.tempMax) {
+            alertas.add(String.format("Temperatura Alta: %.1f°C (Máximo: %.1f°C)",
+                    medicao.temperature, sensor.tempMax));
+        }
+
+        // Verifica Temperatura Mínima
+        if (sensor.tempMin != null && medicao.temperature < sensor.tempMin) {
+            alertas.add(String.format("Temperatura Baixa: %.1f°C (Mínimo: %.1f°C)",
+                    medicao.temperature, sensor.tempMin));
+        }
+
+        // Verifica Umidade Máxima
+        if (sensor.umidMax != null && medicao.humidity > sensor.umidMax) {
+            alertas.add(String.format("Umidade Alta: %.1f%% (Máximo: %.1f%%)",
+                    medicao.humidity, sensor.umidMax));
+        }
+
+        // Verifica Umidade Mínima
+        if (sensor.umidMin != null && medicao.humidity < sensor.umidMin) {
+            alertas.add(String.format("Umidade Baixa: %.1f%% (Mínimo: %.1f%%)",
+                    medicao.humidity, sensor.umidMin));
+        }
+
+        // Se houver algum alerta na lista, monta o e-mail e envia
+        if (!alertas.isEmpty()) {
+            enviarEmailAlerta(sensor, alertas);
+        }
+    }
+
+    private void enviarEmailAlerta(Sensor sensor, List<String> mensagens) {
+        String assunto = "ALERTA: " + sensor.sensorName + " fora dos padrões";
+
+        StringBuilder corpo = new StringBuilder();
+        // Usamos tags HTML para formatar melhor
+        corpo.append("<html><body>");
+        corpo.append("<h3>Olá,</h3>");
+        corpo.append("<p>O sistema de monitoramento detectou anomalias na <b>").append(sensor.sala).append("</b>.</p>");
+        corpo.append("<br>");
+
+        corpo.append("<p>Sensor: <b>").append(sensor.sensorName).append("</b></p>");
+
+        corpo.append("<div style='background-color: #fff3cd; padding: 10px; border: 1px solid #ffeeba;'>");
+        corpo.append("<strong>Detalhes do Alerta:</strong><ul>");
+
+        for (String msg : mensagens) {
+            corpo.append("<li>").append(msg).append("</li>");
+        }
+
+        corpo.append("</ul></div>");
+
+        corpo.append("<br>");
+        corpo.append("<p>Verifique o laboratório imediatamente.</p>");
+        corpo.append("<p><a href='https://sementes.thalesgmartins.com.br' style='background-color: #d9534f; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Acessar Painel</a></p>");
+        corpo.append("</body></html>");
+
+        mailer.send(Mail.withHtml(emailResponsavel, assunto, corpo.toString()));
+
+        System.out.println("Alerta enviado para " + emailResponsavel + " sobre o sensor " + sensor.sensorName);
     }
 
     public Optional<Measurement> findById(Integer sensorId, Instant ts) {

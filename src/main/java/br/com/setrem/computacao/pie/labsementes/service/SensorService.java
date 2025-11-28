@@ -54,6 +54,12 @@ public class SensorService {
         sensorExistente.sensorType = sensorAtualizado.sensorType;
         sensorExistente.uniqueAddress = sensorAtualizado.uniqueAddress;
 
+        sensorExistente.sala = sensorAtualizado.sala;
+        sensorExistente.tempMin = sensorAtualizado.tempMin;
+        sensorExistente.tempMax = sensorAtualizado.tempMax;
+        sensorExistente.umidMin = sensorAtualizado.umidMin;
+        sensorExistente.umidMax = sensorAtualizado.umidMax;
+
         if (sensorExistente.status != sensorAtualizado.status) {
             sensorExistente.status = sensorAtualizado.status;
             sensorExistente.dataUltimaMudancaStatus = Instant.now();
