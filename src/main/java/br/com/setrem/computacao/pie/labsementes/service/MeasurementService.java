@@ -49,6 +49,9 @@ public class MeasurementService {
         );
 
         measurement.persist();
+
+        verificarEEnviarAlertas(sensor, measurement);
+
         return measurement;
     }
 
