@@ -141,7 +141,8 @@ public class MeasurementService {
         String sql = String.format("""
             SELECT
                 time_bucket('%s', ts) AS hora,
-                avg(temperature) AS media
+                avg(temperature) AS media,
+                avg(humidity) AS media_umidade
             FROM
                 measurement
             WHERE
@@ -164,8 +165,10 @@ public class MeasurementService {
                     OffsetDateTime odt = rs.getObject("hora", OffsetDateTime.class);
                     Instant horaAgregada = odt.toInstant();
                     Double mediaValor = rs.getDouble("media");
+                    Double mediaHumidade = rs.getDouble("media_umidade");
 
-                    resultados.add(new SensorDataAggregate(horaAgregada, mediaValor));
+
+                    resultados.add(new SensorDataAggregate(horaAgregada, mediaValor, mediaHumidade));
                 }
             }
         } catch (SQLException e) {

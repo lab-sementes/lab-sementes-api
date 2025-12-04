@@ -1,11 +1,12 @@
 [Unit]
 Description=Interdisciplinar Sementes
 After=network.target
+
+[Service]
 WorkingDirectory=/lab-sementes-api/
-ExecStart= ./mvnw quarkus:dev
+ExecStart= /root/.jbang/currentjdk/bin/java -jar /lab-sementes-api/target/quarkus-app/quarkus-run.jar
 Restart=on-failure
 RestartSec=5s
-SuccessExitStatus=143
 
 [Install]
 WantedBy=multi-user.target
