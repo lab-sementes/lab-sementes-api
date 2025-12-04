@@ -141,7 +141,7 @@ public class MeasurementService {
         String sql = String.format("""
             SELECT
                 time_bucket('%s', ts) AS hora,
-                avg(temperature) AS media
+                avg(temperature) AS media,
                 avg(humidity) AS media_umidade
             FROM
                 measurement
