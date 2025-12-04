@@ -4,5 +4,6 @@ import java.time.Instant;
 
 public record SensorDataAggregate(
         Instant hora,
-        Double media
+        Double media,
+        Double media_umidade
 ) {}
