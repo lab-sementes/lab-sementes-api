@@ -30,6 +30,7 @@ public class MeasurementController {
         } catch (NotFoundException e) {
             return RestResponse.notFound();
         } catch (Exception e) {
+            System.err.println("FALHA AO ENVIAR EMAIL: " + e.getMessage());
             return RestResponse.status(RestResponse.Status.BAD_REQUEST);
         }
     }
