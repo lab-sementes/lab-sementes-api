@@ -67,4 +67,18 @@ public class Sensor extends PanacheEntityBase {
     @Column(name = "intervalo_minutos_alerta")
     public Integer intervaloMinutosAlerta = 60;
 
+    public boolean deveEnviarAlerta() {
+        if (this.dataUltimoAlerta == null) {
+            return true;
+        }
+
+        if (this.intervaloMinutosAlerta == null) {
+            this.intervaloMinutosAlerta = 60;
+        }
+
+        Instant agora = Instant.now();
+        Instant proximoEnvio = this.dataUltimoAlerta.plusSeconds(this.intervaloMinutosAlerta * 60);
+
+        return agora.isAfter(proximoEnvio);
+    }
 }
