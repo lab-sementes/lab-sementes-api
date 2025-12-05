@@ -64,35 +64,45 @@ public class MeasurementService {
     }
 
     private void verificarEEnviarAlertas(Sensor sensor, Measurement medicao) {
+
+        if (!sensor.deveEnviarAlerta()) {
+            return;
+        }
+
         // Lista para acumular mensagens de erro (ex: Temp alta E Umidade baixa)
         List<String> alertas = new ArrayList<>();
 
-        // Verifica Temperatura Máxima (só se estiver configurada no banco)
-        if (sensor.tempMax != null && medicao.temperature > sensor.tempMax) {
-            alertas.add(String.format("Temperatura Alta: %.1f°C (Máximo: %.1f°C)",
-                    medicao.temperature, sensor.tempMax));
+        if (medicao.temperature != null) {
+            // Verifica Temperatura Máxima (só se estiver configurada no banco)
+            if (sensor.tempMax != null && medicao.temperature > sensor.tempMax) {
+                alertas.add(String.format("Temperatura Alta: %.1f°C (Máximo: %.1f°C)",
+                        medicao.temperature, sensor.tempMax));
+            }
+
+            // Verifica Temperatura Mínima
+            if (sensor.tempMin != null && medicao.temperature < sensor.tempMin) {
+                alertas.add(String.format("Temperatura Baixa: %.1f°C (Mínimo: %.1f°C)",
+                        medicao.temperature, sensor.tempMin));
+            }
         }
 
-        // Verifica Temperatura Mínima
-        if (sensor.tempMin != null && medicao.temperature < sensor.tempMin) {
-            alertas.add(String.format("Temperatura Baixa: %.1f°C (Mínimo: %.1f°C)",
-                    medicao.temperature, sensor.tempMin));
-        }
+        if (medicao.humidity != null) {
+            // Verifica Umidade Máxima
+            if (sensor.umidMax != null && medicao.humidity > sensor.umidMax) {
+                alertas.add(String.format("Umidade Alta: %.1f%% (Máximo: %.1f%%)",
+                        medicao.humidity, sensor.umidMax));
+            }
 
-        // Verifica Umidade Máxima
-        if (sensor.umidMax != null && medicao.humidity > sensor.umidMax) {
-            alertas.add(String.format("Umidade Alta: %.1f%% (Máximo: %.1f%%)",
-                    medicao.humidity, sensor.umidMax));
-        }
-
-        // Verifica Umidade Mínima
-        if (sensor.umidMin != null && medicao.humidity < sensor.umidMin) {
-            alertas.add(String.format("Umidade Baixa: %.1f%% (Mínimo: %.1f%%)",
-                    medicao.humidity, sensor.umidMin));
+            // Verifica Umidade Mínima
+            if (sensor.umidMin != null && medicao.humidity < sensor.umidMin) {
+                alertas.add(String.format("Umidade Baixa: %.1f%% (Mínimo: %.1f%%)",
+                        medicao.humidity, sensor.umidMin));
+            }
         }
 
         // Se houver algum alerta na lista, monta o e-mail e envia
         if (!alertas.isEmpty()) {
+            sensor.dataUltimoAlerta = Instant.now();
             enviarEmailAlerta(sensor, alertas);
         }
     }

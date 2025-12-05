@@ -60,4 +60,11 @@ public class Sensor extends PanacheEntityBase {
 
     @Column(name = "umid_max")
     public Double umidMax;
+
+    @Column(name = "data_ultimo_alerta")
+    public Instant dataUltimoAlerta;
+
+    @Column(name = "intervalo_minutos_alerta")
+    public Integer intervaloMinutosAlerta = 60;
+
 }
