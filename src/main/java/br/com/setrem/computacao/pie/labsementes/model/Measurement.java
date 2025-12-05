@@ -13,8 +13,8 @@ public class Measurement extends PanacheEntityBase {
     public MeasurementID id;
 
     // Os valores medidos
-    public double temperature;
-    public double humidity;
+    public Double temperature;
+    public Double humidity;
 
     // Relacionamentos com o Sensor
     @ManyToOne(fetch = FetchType.LAZY)
