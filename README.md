@@ -1,5 +1,13 @@
 # lab-sementes
 
+Esse projeto usa Quarkus para rodar a API de uma dashboard para monitoramento de sensores termo-higrômetros.
+
+## Lidando com sensores sem um timeout padrão
+
+```sql
+UPDATE sensor SET intervalo_minutos_alerta = 60 WHERE intervalo_minutos_alerta IS NULL;
+```
+
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
